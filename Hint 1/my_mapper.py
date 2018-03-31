@@ -34,7 +34,8 @@ def get_result_list(wiki_dict, n):
         for index in range(0, n):
             if len(wiki_dict[key]) > index:
                 result_string = key + "\t" + str(wiki_dict[key][index]) + "\n"
-                result_list.append(result_string)
+                result = result_string.replace("'", "")
+                result_list.append(result)
     return result_list
 
 
@@ -59,8 +60,8 @@ def my_map(input_stream, languages, num_top_entries, output_stream):
             if language == language_project or language == language_code[0]:
                 wiki_list.append(entry)
 
-    # Sort the list based on the the page views
-    sorted_list = sorted(wiki_list, key=itemgetter(2), reverse=True)
+    # Sort the list first by language, then by language with project
+    sorted_list = sorted(wiki_list, key=itemgetter(0, 2), reverse=True)
 
     # Call the function 'add_to_dict()' to populate our dictionary.
     #  - key   : language(project)
@@ -73,6 +74,7 @@ def my_map(input_stream, languages, num_top_entries, output_stream):
 
     # Print our list to the standard output
     for out in output:
+        print(out)
         output_stream.write(out)
 
     pass
@@ -108,7 +110,7 @@ if __name__ == '__main__':
     # 1. Input parameters
     debug = True
 
-    i_file_name = "../../my_dataset/pageviews-20180219-100000_0.txt"
+    i_file_name = "../my_dataset/pageviews-20180219-100000_0.txt"
     o_file_name = "mapResult.txt"
 
     languages = ["en", "es", "fr"]
