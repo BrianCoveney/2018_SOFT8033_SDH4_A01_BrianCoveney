@@ -2,3 +2,5 @@
 venv/
 my_dataset/
 *.txt
+__pycache__/
+
