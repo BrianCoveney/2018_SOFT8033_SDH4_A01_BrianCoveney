@@ -15,11 +15,29 @@
 import sys
 import codecs
 
+
+# ---------------------------------------
+#  FUNCTION get_key_value
+# ---------------------------------------
+def get_key_value(line):
+    item_list = line.split("\t")
+    num_views = int(item_list[1])
+    return num_views
+
+
 # ------------------------------------------
-# FUNCTION my_reduce
+# FUNCTION my_map
 # ------------------------------------------
 def my_reduce(input_stream, output_stream):
+    total_count = 0
+    for text_line in input_stream:
+        num_views = get_key_value(text_line)
+        total_count += num_views
+    res = "total views " + '\t' + str(total_count) + '\n'
+    output_stream.write(res)
+
     pass
+
 
 # ------------------------------------------
 # FUNCTION my_main
@@ -38,6 +56,7 @@ def my_main(debug, i_file_name, o_file_name):
 
     # We launch the Map program
     my_reduce(my_input_stream, my_output_stream)
+
 
 # ---------------------------------------------------------------
 #           PYTHON EXECUTION
