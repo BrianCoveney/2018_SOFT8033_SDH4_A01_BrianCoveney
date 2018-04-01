@@ -26,7 +26,7 @@ def get_key_value(line):
 
 
 # ------------------------------------------
-# FUNCTION my_map
+# FUNCTION my_reducer
 # ------------------------------------------
 def my_reduce(input_stream, output_stream):
     total_count = 0
