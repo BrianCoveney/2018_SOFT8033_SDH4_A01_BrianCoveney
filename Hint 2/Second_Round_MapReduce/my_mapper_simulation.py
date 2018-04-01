@@ -113,8 +113,13 @@ def simulating_my_map(directory, extension, output_stream, per_language_or_proje
 # ------------------------------------------
 def my_main(ext, o_file_name, per_language_or_project):
     # 1. Set the directory
-    current_dir = os.getcwd()
-    dataset_dir = "C://Users//Ignacio.Castineiras//Desktop//Big Data Analytics//4. Assignments//A01_to_students//my_dataset//"
+
+    # --- My path to file -- #
+    dataset_dir = "../../my_dataset/"
+
+    # -- Nacho's path to file -- #
+    # current_dir = os.getcwd()
+    # dataset_dir = "C://Users//Ignacio.Castineiras//Desktop//Big Data Analytics//4. Assignments//A01_to_students//my_dataset//"
 
     # 2. We open the file for writing
     output_file = codecs.open(o_file_name, "w", encoding='utf-8')

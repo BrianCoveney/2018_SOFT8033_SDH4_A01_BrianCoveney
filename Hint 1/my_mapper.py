@@ -54,8 +54,6 @@ def get_result_list(wiki_dict, n):
     return result_list
 
 
-
-
 # ------------------------------------------
 # FUNCTION my_map
 # ------------------------------------------
@@ -87,7 +85,6 @@ def my_map(input_stream, languages, num_top_entries, output_stream):
 
     # Print our list to the standard output
     for out in output:
-        print(out)
         output_stream.write(out)
 
     pass
@@ -123,7 +120,12 @@ if __name__ == '__main__':
     # 1. Input parameters
     debug = True
 
-    i_file_name = "../my_dataset/pageviews-20180219-100000_0.txt"
+    # --- My path to file -- #
+    # i_file_name = "../my_dataset/pageviews-20180219-100000_0.txt"
+
+    # -- Nacho's path to file -- #
+    i_file_name = "pageviews-20180219-100000_0.txt"
+
     o_file_name = "mapResult.txt"
 
     languages = ["en", "es", "fr"]

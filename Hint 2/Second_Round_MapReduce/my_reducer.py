@@ -82,6 +82,8 @@ if __name__ == '__main__':
     # 1. Input parameters
     debug = True
 
+
+
     # This variable must be computed in the first stage
     total_petitions = 21996787
 

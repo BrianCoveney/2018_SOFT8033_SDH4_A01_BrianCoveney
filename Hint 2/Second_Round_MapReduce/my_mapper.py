@@ -99,7 +99,12 @@ if __name__ == '__main__':
     # 1. Input parameters
     debug = True
 
-    i_file_name = "../../my_dataset/pageviews-20180219-100000_0.txt"
+    # --- My path to file -- #
+    # i_file_name = "../../my_dataset/pageviews-20180219-100000_0.txt"
+
+    # -- Nacho's path to file -- #
+    i_file_name = "pageviews-20180219-100000_0.txt"
+
     o_file_name = "mapResult.txt"
 
     per_language_or_project = True  # True for language and False for project

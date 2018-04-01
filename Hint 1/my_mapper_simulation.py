@@ -116,6 +116,9 @@ def my_main(ext, o_file_name, languages, num_top_entries):
     current_dir = os.getcwd()
     dataset_dir = "../my_dataset/"
 
+    # current_dir = os.getcwd()
+    # dataset_dir = get_parent_directory(current_dir) + "\\my_dataset"
+
     # 2. We open the file for writing
     output_file = codecs.open(o_file_name, "w", encoding='utf-8')
 

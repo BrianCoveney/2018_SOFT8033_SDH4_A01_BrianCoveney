@@ -94,7 +94,6 @@ def my_reduce(input_stream, num_top_entries, output_stream):
     # Print our list to the standard output
     for out in output:
         output_stream.write(out)
-        print(out)
 
     pass
 

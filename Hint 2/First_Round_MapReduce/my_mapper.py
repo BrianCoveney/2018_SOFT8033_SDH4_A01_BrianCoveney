@@ -77,7 +77,12 @@ if __name__ == '__main__':
     # 1. Input parameters
     debug = True
 
-    i_file_name = "../../my_dataset/pageviews-20180219-100000_1.txt"
+    # --- My path to file -- #
+    # i_file_name = "../../my_dataset/pageviews-20180219-100000_1.txt"
+
+    # -- Nacho's path to file -- #
+    i_file_name = "pageviews-20180219-100000_1.txt"
+
     o_file_name = "mapResult.txt"
 
     # 2. Call to the function
