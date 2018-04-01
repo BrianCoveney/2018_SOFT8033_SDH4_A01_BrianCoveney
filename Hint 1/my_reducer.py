@@ -22,16 +22,24 @@ from _operator import itemgetter
 
 
 def get_key_value(line):
+    # Get rid of brackets
     line = line.replace("(", "")
     line = line.replace(")", "")
 
+    # Split the string by the tabulator delimiter
     item_list = line.split("\t")
+
+    # Get the key and the value and return them
     language = item_list[0]
     page_view = item_list[1]
 
+    # Split the string by the page and page view count
     fields = page_view.rsplit(",", 1)
+
+    # Get the key and the value and return them
     page_viewed = fields[0]
     num_views = int(fields[1])
+
     return language, page_viewed, num_views
 
 
