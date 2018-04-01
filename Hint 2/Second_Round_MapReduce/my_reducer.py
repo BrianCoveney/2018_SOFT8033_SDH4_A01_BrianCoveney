@@ -14,11 +14,43 @@
 
 import sys
 import codecs
+from _operator import itemgetter
+
+
+def get_key_value(line):
+    # Split the string by tabulator
+    items = line.split("\t")
+
+    # Get values and return them
+    lang = items[0]
+    num_views = int(items[1])
+
+    return lang, num_views
 
 # ------------------------------------------
 # FUNCTION my_reduce
 # ------------------------------------------
 def my_reduce(input_stream, total_petitions, output_stream):
+    wiki_dict = {}
+
+    lang_value = 0
+    for text_line in input_stream:
+        lang_key, num_views = get_key_value(text_line)
+
+        if lang_key not in wiki_dict:
+            wiki_dict[lang_key] = lang_value
+        else:
+            wiki_dict[lang_key] += num_views
+
+    wiki_sorted = sorted(wiki_dict.items(), key=itemgetter(1), reverse=True)
+
+    for s in wiki_sorted:
+        language = s[0]
+        count = s[1]
+        percentage = (count / total_petitions) * 100
+        out = language + "\t(" + str(count) + "," + str(percentage) + "%)" + "\n"
+        output_stream.write(out)
+
     pass
 
 # ------------------------------------------
@@ -51,7 +83,7 @@ if __name__ == '__main__':
     debug = True
 
     # This variable must be computed in the first stage
-    total_petitions = ???
+    total_petitions = 21996787
 
     i_file_name = "sort_simulation.txt"
     o_file_name = "reduce_simulation.txt"
