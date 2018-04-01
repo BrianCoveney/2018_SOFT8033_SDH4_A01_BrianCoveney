@@ -17,6 +17,15 @@ import codecs
 from operator import itemgetter
 
 
+def get_key_value(line):
+    items = line.split(" ")
+    language_project = items[0]
+    page_viewed = items[1]
+    num_views = int(items[2])
+    language_code = items[0].split(".")
+    return language_code, language_project, page_viewed, num_views
+
+
 def add_to_dict(wiki_list, wiki_dict):
     for item in wiki_list:
         if item[0] not in wiki_dict:
@@ -39,6 +48,8 @@ def get_result_list(wiki_dict, n):
     return result_list
 
 
+
+
 # ------------------------------------------
 # FUNCTION my_map
 # ------------------------------------------
@@ -49,15 +60,11 @@ def my_map(input_stream, languages, num_top_entries, output_stream):
 
     # Process the lines to fill our list
     for text_line in input_stream:
-        items = text_line.split(" ")
-        language_project = items[0]
-        page_viewed = items[1]
-        num_views = int(items[2])
-        language_code = items[0].split(".")
-        entry = language_project, page_viewed, num_views
+        (language_code, language_project, page_viewed, num_views) = get_key_value(text_line)
 
         for language in languages:
             if language == language_project or language == language_code[0]:
+                entry = language_project, page_viewed, num_views
                 wiki_list.append(entry)
 
     # Sort the list first by language, then by language with project
