@@ -18,11 +18,17 @@ from operator import itemgetter
 
 
 def get_key_value(line):
+    # Split the string by whitespace
     items = line.split(" ")
+
+    # Get values
     language_project = items[0]
     page_viewed = items[1]
     num_views = int(items[2])
+
+    # Split the string by language code, i.e. language without project
     language_code = items[0].split(".")
+
     return language_code, language_project, page_viewed, num_views
 
 
