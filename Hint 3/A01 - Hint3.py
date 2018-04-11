@@ -12,40 +12,29 @@
 
 import sys
 import codecs
+from operator import itemgetter
 
 
 # ------------------------------------------
-# FUNCTION filter_languages
+# FUNCTION get_language
 # ------------------------------------------
-def filter_languages(line):
-    res = False
-    items = line.split(" ")
-    language_code = items[0].split(".")
-
+def get_language(line, languages):
+    language_project = line[0].split(".")
     for language in languages:
-
-        if language == language_code[0]:
-            print(language)
-            res = True
-
-    return res
+        if language in language_project:
+            return language
 
 
 # ------------------------------------------
-# FUNCTION process_word
+# FUNCTION process_items
 # ------------------------------------------
 def process_items(line):
-    res = ()
-
     items = line.split(" ")
+    lang = items[0]
+    page = items[1]
+    views = int(items[2])
 
-    val1 = items[0]
-    val2 = items[1]
-    val3 = int(items[2])
-
-    res = (val1, val2, val3)
-
-    return sorted(res)
+    return lang, (page, views)
 
 
 # ------------------------------------------
@@ -58,17 +47,25 @@ def my_main(dataset_dir, o_file_dir, languages, num_top_entries):
     # Creation 'textFile', so as to store the content of the dataset into an RDD.
     inputRDD = sc.textFile(dataset_dir)
 
-    # We filter by language to return a new dataset, with only the languages we are interested in
-    filteredRDD = inputRDD.filter(filter_languages)
+    # Return a new RDD by applying a function to each element of this RDD
+    mapRDD = inputRDD.map(lambda x: process_items(x))
 
-    # We map the items of the line we are interested in
-    mappedRDD = filteredRDD.map(lambda x: process_items(x))
+    # Return a new RDD containing only the elements that satisfy our predicate, i.e. languages = ["en", "es", "fr"]
+    filterRDD = mapRDD.filter(lambda x: get_language(x, languages))
 
-    # We sort the rdd
-    sortedRDD = mappedRDD.sortBy(lambda x: (x[0], x[2]), ascending=False)
+    # Group the RDD by 'language_project'
+    groupByKeyRDD = filterRDD.groupByKey()
+
+    # Sorts the RDD by 'language_project'
+    sortByKeyRDD = groupByKeyRDD.sortByKey()
+
+    # Pass each value in the key-value pair RDD through a map function without changing the keys.
+    # Sort the RDD by 'views' with at limit of 'num_top_entries'
+    solutionRDD = sortByKeyRDD.flatMapValues(
+        lambda x: sorted(list(x), key=itemgetter(1), reverse=True)[:num_top_entries])
 
     # We store the RDD solutionRDD into the desired folder from the DBFS
-    sortedRDD.saveAsTextFile(o_file_dir)
+    solutionRDD.saveAsTextFile(o_file_dir)
 
 
 # Complete the Spark Job
@@ -89,4 +86,3 @@ if __name__ == '__main__':
     num_top_entries = 5
 
     my_main(dataset_dir, o_file_dir, languages, num_top_entries)
-
