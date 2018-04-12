@@ -18,39 +18,51 @@ import codecs
 # FUNCTION get_key_value
 # ------------------------------------------
 def get_key_value(line):
-    # Split the string by whitespace
     items = line.split(" ")
-
     num_views = int(items[2])
-
     language_code = items[0].split(".")
     lang = language_code[0]
-
     return lang, num_views
+
+
+# ------------------------------------------
+# FUNCTION get_percentage
+# ------------------------------------------
+def get_percentage(x, sumViews):
+    percentage = (str(float(sum(x)) / float(sumViews) * 100) + "%")
+    return percentage
 
 
 # ------------------------------------------
 # FUNCTION my_main
 # ------------------------------------------
 def my_main(dataset_dir, o_file_dir, per_language_or_project):
-    # 1. We remove the solution directory, to rewrite into it
+    # We remove the solution directory, to rewrite into it
     dbutils.fs.rm(o_file_dir, True)
 
+    # Creation 'textFile', so as to store the content of the dataset into an RDD.
     inputRDD = sc.textFile(dataset_dir)
 
+    # Return a new RDD by applying a function to each element of this RDD
     mappedRDD = inputRDD.map(get_key_value)
 
+    # Persist mappedRDD, as we are going to use it more than once
     mappedRDD.persist()
 
-    total = mappedRDD.values().sum()
+    # Get the sum of page views
+    sumViews = mappedRDD.values().sum()
 
+    # Group the RDD
     mappedRDD = mappedRDD.groupByKey()
 
-    solutionRDD = mappedRDD.mapValues(lambda x: (float(sum(x)) / float(total) * 100))
+    # Map values with a percentage of page views per language
+    solutionRDD = mappedRDD.mapValues(lambda x: get_percentage(x, sumViews))
 
+    # We store the RDD solutionRDD into the desired folder from the DBFS
     solutionRDD.saveAsTextFile(o_file_dir)
 
-	# Complete the Spark Job
+
+# Complete the Spark Job
 
 # ---------------------------------------------------------------
 #           PYTHON EXECUTION
