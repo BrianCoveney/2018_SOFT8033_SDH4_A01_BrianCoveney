@@ -15,22 +15,24 @@
 import sys
 import codecs
 
-# ---------------------------------------
-#  FUNCTION get_key_value
-# ---------------------------------------
 from _operator import itemgetter
 
 
+# ---------------------------------------
+#  FUNCTION get_key_value
+# ---------------------------------------
 def get_key_value(line):
-    # Split the string by whitespace
     items = line.split(" ")
-
     num_views = int(items[2])
+    language_project = items[0].split(".")
+    language = language_project[0]
 
-    language_code = items[0].split(".")
-    lang = language_code[0]
+    if len(language_project) == 1:
+        project = "wikipedia"
+    else:
+        project = language_project[1]
 
-    return lang, num_views
+    return language, project, num_views
 
 
 # ------------------------------------------
@@ -38,31 +40,30 @@ def get_key_value(line):
 # ------------------------------------------
 def my_map(input_stream, per_language_or_project, output_stream):
     wiki_dict = {}
-
-    lang_value = 0
+    count = 0
     for text_line in input_stream:
 
-        lang_key, num_views = get_key_value(text_line)
+        language, project, num_views = get_key_value(text_line)
 
+        # When 'per_language_or_project' is set to True 'wiki_dict' contains languages.
+        # Otherwise 'wiki_dict' contains 'projects'.
         if per_language_or_project:
-            if lang_key not in wiki_dict:
-                wiki_dict[lang_key] = lang_value
+            if language not in wiki_dict:
+                wiki_dict[language] = count
             else:
-                wiki_dict[lang_key] += num_views
-
-        elif not per_language_or_project:
-            if lang_key not in wiki_dict:
-                wiki_dict[lang_key] = lang_value
+                wiki_dict[language] += num_views
+        elif per_language_or_project:
+            if project not in wiki_dict:
+                wiki_dict[project] = count
             else:
-                wiki_dict[lang_key] += num_views
+                wiki_dict[project] += num_views
 
     # Sort the dictionary by the value, i.e the count
     wiki_sorted = sorted(wiki_dict.items(), key=itemgetter(1), reverse=True)
 
-    # Print the (key, value) pairs
-    for s in wiki_sorted:
-        language = s[0]
-        count = s[1]
+    for w in wiki_sorted:
+        language = w[0]
+        count = w[1]
         out = language + "\t" + str(count) + "\n"
         output_stream.write(out)
 
@@ -100,10 +101,10 @@ if __name__ == '__main__':
     debug = True
 
     # --- My path to file -- #
-    # i_file_name = "../../my_dataset/pageviews-20180219-100000_0.txt"
+    i_file_name = "../../my_dataset/pageviews-20180219-100000_0.txt"
 
     # -- Nacho's path to file -- #
-    i_file_name = "pageviews-20180219-100000_0.txt"
+    # i_file_name = "pageviews-20180219-100000_0.txt"
 
     o_file_name = "mapResult.txt"
 
