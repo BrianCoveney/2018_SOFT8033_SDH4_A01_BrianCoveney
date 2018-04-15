@@ -36,6 +36,29 @@ def get_key_value(line):
 
 
 # ------------------------------------------
+# FUNCTION get_language_or_project
+# ------------------------------------------
+def get_language_or_project(item, dict, count, num_views):
+    if item not in dict:
+        dict[item] = count
+        return dict
+    else:
+        dict[item] += num_views
+        return dict
+
+
+# ---------------------------------------
+#  FUNCTION print_key_value
+# ---------------------------------------
+def print_key_value(dict, output_stream):
+    for w in dict:
+        language = w[0]
+        count = w[1]
+        out = language + "\t" + str(count) + "\n"
+        output_stream.write(out)
+
+
+# ------------------------------------------
 # FUNCTION my_map
 # ------------------------------------------
 def my_map(input_stream, per_language_or_project, output_stream):
@@ -48,24 +71,14 @@ def my_map(input_stream, per_language_or_project, output_stream):
         # When 'per_language_or_project' is set to True 'wiki_dict' contains languages.
         # Otherwise 'wiki_dict' contains 'projects'.
         if per_language_or_project:
-            if language not in wiki_dict:
-                wiki_dict[language] = count
-            else:
-                wiki_dict[language] += num_views
-        elif per_language_or_project:
-            if project not in wiki_dict:
-                wiki_dict[project] = count
-            else:
-                wiki_dict[project] += num_views
+            wiki_dict = get_language_or_project(language, wiki_dict, count, num_views)
+        else:
+            wiki_dict = get_language_or_project(project, wiki_dict, count, num_views)
 
     # Sort the dictionary by the value, i.e the count
     wiki_sorted = sorted(wiki_dict.items(), key=itemgetter(1), reverse=True)
 
-    for w in wiki_sorted:
-        language = w[0]
-        count = w[1]
-        out = language + "\t" + str(count) + "\n"
-        output_stream.write(out)
+    print_key_value(wiki_sorted, output_stream)
 
     pass
 
